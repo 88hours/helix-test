@@ -25,8 +25,9 @@ def greet_user(user_id):
     return f"Hello, {user.get('name')}!"
 
 
-try:
-    greet_user("bob")
-except Exception:
-    rollbar.report_exc_info()
-    print("Error sent to Rollbar.")
+if __name__ == "__main__":
+    try:
+        greet_user("bob")
+    except Exception:
+        rollbar.report_exc_info()
+        print("Error sent to Rollbar.")
