@@ -21,7 +21,8 @@ def get_user(user_id):
 
 def greet_user(user_id):
     user = get_user(user_id)
-    # This will raise AttributeError: 'NoneType' object has no attribute 'get'
+    if user is None:
+        return "Hello, Unknown!"
     return f"Hello, {user.get('name')}!"
 
 
