@@ -98,3 +98,5 @@ curl -X POST https://<your-helix-url>/webhook/rollbar \
   -H "Content-Type: application/json" \
   -d @../helix/test_payloads/rollbar_new_item.json
 ```
+
+./.venv/bin/python -m uvicorn fast_api:app --reload
