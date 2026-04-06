@@ -6,7 +6,4 @@
   [project]
   name = "helix-test"
   version = "0.1.0"
-  dependencies = []
-
-  [project.optional-dependencies]
-  dev = ["pytest"]
+  dependencies = ["fastapi[standard]", "sentry-sdk", "rollbar", "uvicorn[standard]"]
