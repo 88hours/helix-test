@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from starlette.responses import HTMLResponse
 import sentry_sdk
 
 sentry_sdk.init(
@@ -11,9 +12,42 @@ sentry_sdk.init(
 app = FastAPI()
 
 
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 def read_root():
-    return {"Hello": "World"}
+    return """
+    <html>
+        <head>
+            <title>Error Simulator</title>
+            <style>
+                body { font-family: system-ui, sans-serif; background: #f7f8fa; color: #1f2937; padding: 2rem; }
+                .container { max-width: 720px; margin: 0 auto; }
+                h1 { margin-bottom: 0.5rem; }
+                p { margin-top: 0; color: #4b5563; }
+                .grid { display: grid; gap: 0.75rem; margin-top: 1.5rem; }
+                button { background: #2563eb; border: none; color: white; padding: 0.9rem 1.2rem; border-radius: 0.5rem; cursor: pointer; font-size: 1rem; }
+                button:hover { background: #1d4ed8; }
+                .note { margin-top: 1rem; color: #6b7280; font-size: 0.95rem; }
+            </style>
+        </head>
+        <body>
+            <div class="container">
+                <h1>Error Simulator</h1>
+                <p>Click a button to invoke the matching error route.</p>
+                <div class="grid">
+                    <button onclick="window.location.href='/error/key'">Simulate key error</button>
+                    <button onclick="window.location.href='/error/type'">Simulate type error</button>
+                    <button onclick="window.location.href='/error/index'">Simulate index error</button>
+                    <button onclick="window.location.href='/error/value'">Simulate value error</button>
+                    <button onclick="window.location.href='/error/zero-division'">Simulate zero division</button>
+                    <button onclick="window.location.href='/error/import'">Simulate import error</button>
+                    <button onclick="window.location.href='/error/runtime'">Simulate runtime error</button>
+                    <button onclick="window.location.href='/sentry-debug'">Simulate sentry debug</button>
+                </div>
+                <p class="note">Note: each click intentionally triggers a Python exception.</p>
+            </div>
+        </body>
+    </html>
+    """
 
 
 @app.get("/items/{item_id}")
