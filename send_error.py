@@ -39,7 +39,8 @@ def attribute_error():
 
     def greet_user(user_id):
         user = get_user(user_id)
-        # bug: user is None for unknown IDs
+        if user is None:
+            return "Hello, Guest!"
         return f"Hello, {user.get('name')}!"
 
     greet_user("bob")
