@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.responses import JSONResponse
 import sentry_sdk
 
 sentry_sdk.init(
@@ -23,3 +24,14 @@ def read_item(item_id: int, q: str | None = None):
 @app.get("/sentry-debug")
 async def trigger_error():
     division_by_zero = 1 / 0
+
+@app.get("/error/import")
+def import_error_endpoint():
+    try:
+        import openpyxl  # noqa: F401
+    except ImportError:
+        return JSONResponse(
+            status_code=503,
+            content={"error": "Excel export unavailable: openpyxl is not installed"},
+        )
+    return {"status": "ok"}
