@@ -81,7 +81,7 @@ def trigger_index_error():
     """IndexError — page offset beyond list bounds."""
     def get_page(results, page, page_size=10):
         start = page * page_size
-        return results[start]
+        return results[start:start + page_size]
 
     get_page(list(range(5)), page=3)
 
