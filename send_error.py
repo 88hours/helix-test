@@ -69,9 +69,11 @@ def type_error():
 def index_error():
     """IndexError — page offset beyond list bounds."""
     def get_page(results, page, page_size=10):
-        # bug: no bounds check before slicing
         start = page * page_size
-        return results[start]
+        if start >= len(results):
+            return []
+        end = start + page_size
+        return results[start:end]
 
     get_page(list(range(5)), page=3)
 
