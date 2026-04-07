@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from starlette.responses import HTMLResponse
+from starlette.responses import HTMLResponse, JSONResponse
 import sentry_sdk
 
 sentry_sdk.init(
@@ -114,16 +114,18 @@ def trigger_import_error():
     export_to_excel(["col1", "col2"])
 
 
+def get_db_connection(pool):
+    if pool.get("available", 0) == 0:
+        return None
+    pool["available"] -= 1
+    return pool
+
+
 @app.get("/error/runtime")
 def trigger_runtime_error():
     """RuntimeError — database connection pool exhausted."""
-    def get_db_connection(pool):
-        if pool["available"] == 0:
-            raise RuntimeError(
-                f"Database connection pool exhausted "
-                f"(max={pool['max']}, in_use={pool['in_use']})"
-            )
-        pool["available"] -= 1
-        return pool
-
-    get_db_connection({"max": 10, "in_use": 10, "available": 0})
+    pool = {"max": 10, "in_use": 10, "available": 0}
+    conn = get_db_connection(pool)
+    if conn is None:
+        return JSONResponse(status_code=503, content={"error": "Database connection pool exhausted", "max": pool["max"], "in_use": pool["in_use"]})
+    return {"connection": "ok"}
