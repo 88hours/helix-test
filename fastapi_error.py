@@ -100,6 +100,8 @@ def trigger_value_error():
 def trigger_zero_division_error():
     """ZeroDivisionError — discount calculation with zero item count."""
     def average_item_price(order):
+        if order["item_count"] == 0:
+            return 0.0
         return order["total"] / order["item_count"]
 
     average_item_price({"total": 49.99, "item_count": 0})
