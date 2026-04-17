@@ -59,7 +59,8 @@ def read_item(item_id: int, q: str | None = None):
 def trigger_key_error():
     """KeyError — required key missing from payment payload."""
     def process_payment(payload):
-        return f"Charging ${payload['amount']} to card {payload.get('card_last4', 'xxxx')}"
+        amount = payload.get('amount', 0)
+        return f"Charging ${amount} to card {payload.get('card_last4', 'xxxx')}"
 
     process_payment({"card_last4": "4242"})
 
