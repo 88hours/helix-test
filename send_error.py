@@ -26,6 +26,16 @@ rollbar.init(
 )
 
 
+_user_store = {"alice": {"name": "Alice", "role": "admin"}}
+
+
+def greet_user(username):
+    user = _user_store.get(username)
+    if user is None:
+        return f"Hello, {username}!"
+    return f"Hello, {user.get('name')}!"
+
+
 # ---------------------------------------------------------------------------
 # Error scenarios
 # ---------------------------------------------------------------------------
